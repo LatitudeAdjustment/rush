@@ -1,8 +1,23 @@
-<h1>Listing Rushing stats</h1>
+<h1>Rushing Stats</h1>
 
 <table>
   <thead>
     <tr>
+      <th>Player</th>
+      <th>Team</th>
+      <th>Position</th>
+      <th>Att</th>
+      <th>Att/G</th>
+      <th><%= link "Yds", to: Routes.stats_path(@conn, :index, sort: "Yds") %></th>
+      <th>Avg</th>
+      <th>Yds/G</th> 
+      <th><%= link "TD", to: Routes.stats_path(@conn, :index, sort: "TD") %></th>      
+      <th><%= link "Lng", to: Routes.stats_path(@conn, :index, sort: "Lng") %></th>
+      <th>1st</th>       
+      <th>1st%</th>  
+      <th>20+</th> 
+      <th>40+</th>     
+      <th>FUM</th> 
 
       <%= if false do %>
         <th></th>
@@ -12,7 +27,21 @@
   <tbody>
 <%= for stats <- @rushing_stats do %>
     <tr>
-
+      <td><%= stats.player %></td>
+      <td><%= stats.team %></td>
+      <td><%= stats.position %></td>
+      <td><%= stats.data["Att"] %></td>
+      <td><%= stats.data["Att/G"] %></td>
+      <td><%= stats.data["Yds"] %></td>
+      <td><%= stats.data["Avg"] %></td>
+      <td><%= stats.data["Yds/G"] %></td>
+      <td><%= stats.data["TD"] %></td>
+      <td><%= stats.data["Lng"] %></td>
+      <td><%= stats.data["1st"] %></td>
+      <td><%= stats.data["1st%"] %></td>
+      <td><%= stats.data["20+"] %></td>
+      <td><%= stats.data["40+"] %></td> 
+      <td><%= stats.data["FUM"] %></td>            
       <%= if false do %>
       <td>
         <span><%= link "Show", to: Routes.stats_path(@conn, :show, stats) %></span>
