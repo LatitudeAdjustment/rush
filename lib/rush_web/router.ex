@@ -18,6 +18,8 @@ defmodule RushWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+
+    resources "stats", StatsController, only: [:index]
   end
 
   # Other scopes may use custom stacks.
