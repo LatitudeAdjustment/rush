@@ -21,11 +21,6 @@ defmodule Rush.Stats do
     Repo.all(RushingStats)
   end
 
-  def list_rushing_stats(:sort, "Yds") do
-    list_rushing_stats()
-      |> Enum.sort(&(&1["Yds"] >= &2["Yds"]))
-  end
-
   @doc """
   Creates a stats.
 

@@ -3,6 +3,13 @@ defmodule RushWeb.StatsController do
 
   alias Rush.Stats
 
+  def index(conn, %{"name" => name} = _params) do
+    rushing_stats =
+      Stats.list_rushing_stats()
+      |> Enum.filter(fn stats -> String.contains?(stats.player, name) end)
+    render(conn, "index.html", rushing_stats: rushing_stats)
+  end
+
   def index(conn, %{"sort" => "Yds"} = _params) do
     rushing_stats =
       Stats.list_rushing_stats()

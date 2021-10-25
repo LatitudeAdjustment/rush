@@ -1,5 +1,10 @@
 <h1>Rushing Stats</h1>
 
+<%= form_for @conn, Routes.stats_path(@conn, :index), [method: :get], fn f -> %>
+  <%= text_input f, :name, maxlength: 30 %>
+  <%= submit "Player Name" %>
+<% end %>
+
 <table>
   <thead>
     <tr>
