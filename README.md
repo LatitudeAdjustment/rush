@@ -1,19 +1,38 @@
 # Rush
 
-To start your Phoenix server:
+Based on the following:
 
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.setup`
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+https://github.com/tsicareers/nfl-rushing
 
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
+## Load Sample Data
 
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+Initially loaded decoded sample JSON from file into GenServer, now loads JSON
+file into database.
 
-## Learn more
+Loads rushing_data.json from base folder.
 
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+```bash
+iex -S mix phx.server
+```
+
+```elixir
+iex> stats = Rush.RushingData.get_data()
+iex> Rush.RushingData.create_rushing_stats(stats) 
+```
+
+## Sort (Yds, TD, Lng)
+
+Sort (via column header) only sorts high to low.
+
+## Front End
+
+There is no front end Javascript or Framework, it uses strictly Phoenix templates.
+
+## Filter by Player Name
+
+Filter by player name cannot be combined with sorting parameters.
+Also this filter is not preserved when creating the CSV file.
+
+## CSV File
+
+The CSV filename is hardcoded to base folder, rushing_stats.csv.

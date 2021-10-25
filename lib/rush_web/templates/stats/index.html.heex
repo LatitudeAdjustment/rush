@@ -5,6 +5,8 @@
   <%= submit "Player Name" %>
 <% end %>
 
+<%= link "CSV", to: Routes.stats_path(@conn, :index, output: "CSV"), class: "button" %>
+
 <table>
   <thead>
     <tr>

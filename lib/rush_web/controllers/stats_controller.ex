@@ -2,6 +2,7 @@ defmodule RushWeb.StatsController do
   use RushWeb, :controller
 
   alias Rush.Stats
+  alias Rush.CsvFile
 
   def index(conn, %{"name" => name} = _params) do
     rushing_stats =
@@ -31,6 +32,16 @@ defmodule RushWeb.StatsController do
     render(conn, "index.html", rushing_stats: rushing_stats)
   end
 
+  def index(conn, %{"output" => "CSV"} = _params) do
+    rushing_stats = Stats.list_rushing_stats()
+    filename = "rushing_stats.csv"
+    write_csv_file(rushing_stats, filename)
+    conn =
+      conn
+      |> put_flash(:info, "Wrote CSV file: #{filename}")
+    render(conn, "index.html", rushing_stats: rushing_stats)
+  end
+
   def index(conn, _params) do
     rushing_stats = Stats.list_rushing_stats()
     render(conn, "index.html", rushing_stats: rushing_stats)
@@ -40,5 +51,11 @@ defmodule RushWeb.StatsController do
     p1 = String.replace(p1, "T", "") |> String.to_integer()
     p2 = String.replace(p2, "T", "") |> String.to_integer()
     p1 >= p2
+  end
+
+  defp write_csv_file(rushing_stats, filename) do
+    rushing_stats
+      |> CsvFile.maps_to_lists()
+      |> CsvFile.to_file(filename)
   end
 end
