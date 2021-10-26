@@ -1,15 +1,15 @@
 defmodule Rush.RushingData do
-
   alias Rush.Stats
 
-  def get_data(filename \\ "rushing_data.json") do
-    convert(read_json_data(filename))
+  def import_file(filename \\ "rushing_data.json") do
+    read_json_data(filename)
+    |> convert()
+    |> create_rushing_stats()
   end
 
   def convert(stats) do
     case Jason.decode(stats) do
-      {:ok, stats} -> Enum.map(stats, &(sanitize(&1)))
-
+      {:ok, stats} -> Enum.map(stats, &sanitize(&1))
       _ -> []
     end
   end
@@ -19,37 +19,45 @@ defmodule Rush.RushingData do
   end
 
   def create_rushing_stats(rushing_stats) do
-    %{player: rushing_stats["Player"],
-       team: rushing_stats["Team"],
-       position: rushing_stats["Pos"],
-       data: %{
-         "Att": rushing_stats["Att"],
-         "Att/G": rushing_stats["Att/G"],
-         "Yds": rushing_stats["Yds"],
-         "Avg": rushing_stats["Avg"],
-         "Yds/G": rushing_stats["Yds/G"],
-         "TD": rushing_stats["TD"],
-         "Lng": rushing_stats["Lng"],
-         "1st": rushing_stats["1st"],
-         "1st%": rushing_stats["1st%"],
-         "20+": rushing_stats["20+"],
-         "40+": rushing_stats["40+"],
-         "FUM": rushing_stats["FUM"]
-        }
-     }
-     |> Stats.create_stats()
+    %{
+      player: rushing_stats["Player"],
+      team: rushing_stats["Team"],
+      position: rushing_stats["Pos"],
+      data: %{
+        Att: rushing_stats["Att"],
+        "Att/G": rushing_stats["Att/G"],
+        Yds: rushing_stats["Yds"],
+        Avg: rushing_stats["Avg"],
+        "Yds/G": rushing_stats["Yds/G"],
+        TD: rushing_stats["TD"],
+        Lng: rushing_stats["Lng"],
+        "1st": rushing_stats["1st"],
+        "1st%": rushing_stats["1st%"],
+        "20+": rushing_stats["20+"],
+        "40+": rushing_stats["40+"],
+        FUM: rushing_stats["FUM"]
+      }
+    }
+    |> Stats.create_stats()
   end
 
   defp sanitize(stats) do
     sanitize_yds(stats)
-      |> sanitize_lng()
+    |> sanitize_lng()
   end
 
   defp sanitize_yds(stats) do
     case is_binary(stats["Yds"]) do
-      true -> Map.put(stats, "Yds", String.replace(stats["Yds"], ",", "")
-        |> String.to_integer())
-      false -> stats
+      true ->
+        Map.put(
+          stats,
+          "Yds",
+          String.replace(stats["Yds"], ",", "")
+          |> String.to_integer()
+        )
+
+      false ->
+        stats
     end
   end
 
@@ -66,5 +74,4 @@ defmodule Rush.RushingData do
       {:error, _reason} -> nil
     end
   end
-
 end

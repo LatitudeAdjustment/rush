@@ -16,6 +16,6 @@ defmodule Rush.Stats.RushingStats do
   def changeset(stats, attrs) do
     stats
     |> cast(attrs, [:player, :team, :position, :data])
-    |> validate_required([])
+    |> validate_required([:player])
   end
 end
